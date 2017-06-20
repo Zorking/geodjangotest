@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Shop</title>
+</head>
+<body>
+<a href="{% url 'home' %}">Home</a>
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Save</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Shop</title>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+</head>
+<body>
+
+
+<h1>Shop GEO-Test</h1>
+<a href="{% url 'create_shop' %}">Create Shop</a>
+<form method="post" action="./">
+    {% csrf_token %}
+    <table>
+        {{ form }}
+    </table>
+    <input type="submit" value="Search"/>
+</form>
+
+{% if shops %}
+    <h2>Shops near you</h2>
+    <ul>
+        {% for shop in shops %}
+            <li><b>{{ shop.name }}</b>: distance: {{ shop.distance }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+<script>
+    $(document).ready(function () {
+        var latlng = new google.maps.LatLng("59.9342802", "30.3350986");
+        var mapOptions = {
+            zoom: 10,
+            center: latlng,
+            mapTypeControl: false,
+            navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map($('.map')[0], mapOptions);
+
+{#        var marker = new google.maps.Marker({#}
+{#            position: latlng,#}
+{#            map: map,#}
+{#            title: "Jesteś tutaj"#}
+{#        });#}
+
+        {% for shop in shops %}
+            latlng = new google.maps.LatLng("{{ shop.location.y }}", "{{ shop.location.x }}");
+            new google.maps.Marker({
+                position: latlng,
+                map: map,
+                title: "{{ shop.name }}"
+            });
+        {% endfor %}
+    });
+</script>
+<div class="map" style="width: 400px; height: 400px;"></div>
+</body>
+</html>
