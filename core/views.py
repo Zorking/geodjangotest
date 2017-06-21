@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.gis import geos
 from django.contrib.gis import measure
 from django.shortcuts import render, redirect
@@ -45,3 +46,13 @@ def create_shop(request):
             return redirect('home')
     context = {'form': form}
     return render(request, 'create_shop.html', context)
+
+
+def draw_polygons(request):
+    context = {'polygons': models.Polygon.objects.all().count()}
+    if request.POST:
+        for poly in request.POST:
+            if 'poly' in poly:
+                models.Polygon.objects.create(name=poly, polygon=request.POST.get(poly))
+        messages.success(request, 'New polygons are successfully created')
+    return render(request, 'draw_polygons.html', context)

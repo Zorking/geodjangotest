@@ -12,3 +12,8 @@ class Shop(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class Polygon(models.Model):
+    name = models.CharField(max_length=127)
+    polygon = gis_models.PolygonField(geography=True)

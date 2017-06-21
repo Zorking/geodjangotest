@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home, name='home'),
     url(r'^create_shop/$', views.create_shop, name='create_shop'),
+    url(r'^draw_polygons/$', views.draw_polygons, name='draw_polygons'),
 ]

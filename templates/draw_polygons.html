@@ -1,0 +1,93 @@
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drawing tools</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 50%;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+{% buttons %}
+    <a href="{% url 'home' %}" class="btn btn-primary ">Home</a>
+    <a href="{% url 'create_shop' %}" class="btn btn-primary ">Create Shop</a>
+{% endbuttons %}
+<div id="map"></div>
+<script>
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 8
+        });
+
+        var drawingManager = new google.maps.drawing.DrawingManager({
+            drawingMode: google.maps.drawing.OverlayType.MARKER,
+            drawingControl: true,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: ['polygon']
+            },
+            markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
+            circleOptions: {
+                fillColor: '#ffff00',
+                fillOpacity: 1,
+                strokeWeight: 5,
+                clickable: false,
+                editable: true,
+                zIndex: 1
+            }
+        });
+        drawingManager.setMap(map);
+        google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
+
+            var wkt = GMapPolygonToWKT(polygon);
+            var inputs_len = document.getElementsByTagName('input').length;
+            var input = document.createElement('input');
+            input.setAttribute('type', 'hidden');
+            input.setAttribute('name', 'poly' + inputs_len);
+            input.setAttribute('value', wkt);
+            document.getElementById('polyForm').appendChild(input);
+        });
+    }
+    function GMapPolygonToWKT(poly) {
+        var wkt = 'POLYGON(';
+        var paths = poly.getPaths();
+        for (var i = 0; i < paths.getLength(); i++) {
+            var path = paths.getAt(i);
+            wkt += '(';
+            for (var j = 0; j < path.getLength(); j++) {
+                wkt += path.getAt(j).lng().toString() + ' ' + path.getAt(j).lat().toString() + ',';
+            }
+            wkt += path.getAt(0).lng().toString() + ' ' + path.getAt(0).lat().toString() + '),';
+        }
+        wkt = wkt.substring(0, wkt.length - 1) + ')';
+        return wkt;
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXQdln8GwQ_cXxxCJNgRr21sKsEwi9k1E&libraries=drawing&callback=initMap"
+        async defer></script>
+<form method="post" id="polyForm">
+    {% csrf_token %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">Save</button>
+    {% endbuttons %}
+</form>
+<h2>Polygons in db: {{ polygons }}</h2>
+</body>
+</html>
