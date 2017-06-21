@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from geopy.geocoders import GoogleV3
 
 from core import forms, models
-
+from geodjangotest.settings import GOOGLE_MAP_API_KEY
 
 def geocode_address(address):
     geo_locator = GoogleV3()
@@ -49,7 +49,8 @@ def create_shop(request):
 
 
 def draw_polygons(request):
-    context = {'polygons': models.Polygon.objects.all().count()}
+    context = {'polygons': models.Polygon.objects.all().count(),
+               'api_key': GOOGLE_MAP_API_KEY}
     if request.POST:
         for poly in request.POST:
             if 'poly' in poly:
