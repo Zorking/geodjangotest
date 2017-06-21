@@ -5,17 +5,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Drawing tools</title>
+    <title>Draw Polygons</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <style>
-        /* Always set the map height explicitly to define the size of the div
-         * element that contains the map. */
         #map {
             height: 50%;
         }
 
-        /* Optional: Makes the sample page fill the window. */
         html, body {
             height: 100%;
             margin: 0;
@@ -64,6 +61,16 @@
             input.setAttribute('value', wkt);
             document.getElementById('polyForm').appendChild(input);
         });
+        var coord = drawPolyFromWKT();
+        var poly = new google.maps.Polygon({
+            paths: coord,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35
+        });
+        poly.setMap(map);
     }
     function GMapPolygonToWKT(poly) {
         var wkt = 'POLYGON(';
@@ -79,6 +86,46 @@
         wkt = wkt.substring(0, wkt.length - 1) + ')';
         return wkt;
     }
+    function drawPolyFromWKT() {
+        var wkt = {{ poly|safe }}; //this is your WKT string
+
+        //using regex, we will get the indivudal Rings
+        var regex = /\(([^()]+)\)/g;
+        var Rings = [];
+        var results;
+        while (results = regex.exec(wkt)) {
+            Rings.push(results[1]);
+        }
+
+        var ptsArray = [];
+
+        var polyLen = Rings.length;
+
+        //now we need to draw the polygon for each of inner rings, but reversed
+        for (var i = 0; i < polyLen; i++) {
+            ptsArray = AddPoints(Rings[i], ptsArray);
+        }
+        return ptsArray
+    }
+
+    //function to add points from individual rings
+    function AddPoints(data, ptsArray) {
+        //first spilt the string into individual points
+        var pointsData = data.split(",");
+
+
+        //iterate over each points data and create a latlong
+        //& add it to the cords array
+        var len = pointsData.length;
+        for (var i = 0; i < len; i++) {
+            var xy = pointsData[i].split(" ");
+
+            var pt = {'lat': parseInt(xy[1]), 'lng': parseInt(xy[0])};
+            ptsArray.push(pt);
+        }
+        return ptsArray
+
+    }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&libraries=drawing&callback=initMap"
         async defer></script>
@@ -88,6 +135,6 @@
         <button type="submit" class="btn btn-primary">Save</button>
     {% endbuttons %}
 </form>
-<h2>Polygons in db: {{ polygons }}</h2>
+<h2>Polygons in db: {{ polygons.count }}</h2>
 </body>
 </html>

@@ -1,0 +1,11 @@
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'HOST': '127.0.0.1',
+        'NAME': 'YOUR DB NAME',
+        'USER': 'YOUR DB USER',
+        'PASSWORD': 'YOUR DB PASSWORD'
+    }
+}
+
+GOOGLE_MAP_API_KEY = 'YOUR GOOGLE MAPS API KEY'

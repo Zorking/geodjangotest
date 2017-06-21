@@ -14,7 +14,7 @@
 
 
 <h1>Shop GEO-Test</h1>
-{% buttons %}
+{% buttons  %}
     <a href="{% url 'create_shop' %}" class="btn btn-primary ">Create Shop</a>
     <a href="{% url 'draw_polygons' %}" class="btn btn-primary ">Draw Polygons</a>
 {% endbuttons %}
@@ -51,7 +51,7 @@
 <div style="margin-top: 50px;"></div>
 
 
-<form method="post" action="./">
+<form method="post">
     {% csrf_token %}
     {% bootstrap_form_errors form %}
     {% bootstrap_form form form_group_class='col-sm-4' layout='horizontal' %}

@@ -55,8 +55,7 @@ ROOT_URLCONF = 'geodjangotest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,15 +73,7 @@ WSGI_APPLICATION = 'geodjangotest.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'HOST': '127.0.0.1',
-        'NAME': 'geodjango_test',
-        'USER': 'geodjango_test',
-        'PASSWORD': 'geodjango_test'
-    }
-}
+DATABASES = None
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -120,4 +111,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-GOOGLE_MAP_API_KEY = 'ТВОЙ КЛЮЧ ОТ GOOGLE MAPS API'
+GOOGLE_MAP_API_KEY = None
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
