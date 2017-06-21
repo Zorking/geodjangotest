@@ -44,7 +44,7 @@
                 drawingModes: ['polygon']
             },
             markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
-            circleOptions: {
+            polygonOptions: {
                 fillColor: '#ffff00',
                 fillOpacity: 1,
                 strokeWeight: 5,
@@ -80,7 +80,7 @@
         return wkt;
     }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXQdln8GwQ_cXxxCJNgRr21sKsEwi9k1E&libraries=drawing&callback=initMap"
+<script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&libraries=drawing&callback=initMap"
         async defer></script>
 <form method="post" id="polyForm">
     {% csrf_token %}

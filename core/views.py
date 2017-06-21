@@ -49,11 +49,11 @@ def create_shop(request):
 
 
 def draw_polygons(request):
-    context = {'polygons': models.Polygon.objects.all().count(),
-               'api_key': GOOGLE_MAP_API_KEY}
     if request.POST:
         for poly in request.POST:
             if 'poly' in poly:
                 models.Polygon.objects.create(name=poly, polygon=request.POST.get(poly))
         messages.success(request, 'New polygons are successfully created')
+    context = {'polygons': models.Polygon.objects.all().count(),
+               'api_key': GOOGLE_MAP_API_KEY}
     return render(request, 'draw_polygons.html', context)
