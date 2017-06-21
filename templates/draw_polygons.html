@@ -1,7 +1,4 @@
 {% load bootstrap3 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-{% bootstrap_messages %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,6 +16,11 @@
             padding: 0;
         }
     </style>
+    {% bootstrap_css %}
+    <script src="{% bootstrap_jquery_url %}"></script>
+    {% bootstrap_javascript %}
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&libraries=drawing&callback=initMap" async
+            defer></script>
 </head>
 <body>
 {% buttons %}
@@ -127,8 +129,6 @@
 
     }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&libraries=drawing&callback=initMap"
-        async defer></script>
 <form method="post" id="polyForm">
     {% csrf_token %}
     {% buttons %}

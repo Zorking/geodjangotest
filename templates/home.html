@@ -1,20 +1,19 @@
 {% load bootstrap3 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-{% bootstrap_messages %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Create Shop</title>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    {% bootstrap_css %}
+    <script src="{% bootstrap_jquery_url %}"></script>
+    {% bootstrap_javascript %}
 </head>
 <body>
 
 
 <h1>Shop GEO-Test</h1>
-{% buttons  %}
+{% buttons %}
     <a href="{% url 'create_shop' %}" class="btn btn-primary ">Create Shop</a>
     <a href="{% url 'draw_polygons' %}" class="btn btn-primary ">Draw Polygons</a>
 {% endbuttons %}
